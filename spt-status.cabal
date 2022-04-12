@@ -1,0 +1,123 @@
+cabal-version:      2.4
+name:               spt-status
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+-- synopsis:
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+-- license:
+author:             Dmytro Pochapskyi
+maintainer:         pchpsky@outlook.com
+
+extra-source-files: CHANGELOG.md
+
+common common-ghc-options
+  ghc-options:
+    -Wall -Wcompat -Werror -Widentities -Wincomplete-record-updates
+    -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints
+    -fhide-source-paths -Wno-unused-do-bind -fshow-hole-constraints
+    -Wno-missed-extra-shared-lib
+
+common common-extensions
+  default-extensions:
+    OverloadedStrings
+    RecordWildCards
+    NamedFieldPuns
+    GeneralizedNewtypeDeriving
+
+common common-relude
+  build-depends:
+    relude ^>= 1.0.0.0
+
+  mixins:
+    , base hiding (Prelude)
+    , relude (Relude as Prelude)
+    , relude
+
+executable spt-status
+  import: common-ghc-options
+  import: common-extensions
+  import: common-relude
+
+  main-is:          Main.hs
+
+  -- Modules included in this executable, other than Main.
+  -- other-modules:
+
+  -- LANGUAGE extensions used by modules in this package.
+  -- other-extensions:
+  build-depends:
+    , base >=4.14
+    , spt-status
+    , turtle
+    , parsec
+    , foldl
+    , shelly
+    , dbus
+    , containers
+    , mtl
+
+  hs-source-dirs: app
+
+  default-language: Haskell2010
+
+  default-extensions:
+    OverloadedStrings
+
+library
+  import: common-ghc-options
+  import: common-extensions
+  import: common-relude
+
+  exposed-modules:
+    DBusClient
+    Default
+    Output
+    PlayerState
+    PlayerMetadata
+    PlayerTime
+    Polybar
+    Program
+    Scroll
+
+  build-depends:
+    , base >=4.14
+    , dbus >= 1.2
+    , mtl >= 2.2
+    , containers >= 0.6
+
+  hs-source-dirs: src
+
+  default-language: Haskell2010
+
+test-suite test
+  import: common-extensions
+  import: common-relude
+  import: common-ghc-options
+
+  default-language: Haskell2010
+
+  type: exitcode-stdio-1.0
+
+  hs-source-dirs:
+    test
+
+  main-is:
+    test.hs
+
+  build-depends:
+    , base >= 4.14
+    , spt-status
+    , tasty >= 1.4
+    , tasty-hunit
+
+  other-modules:
+    ScrollSpec
+    PolybarSpec
