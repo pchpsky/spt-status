@@ -24,7 +24,7 @@
 
         packageName = "spt-status";
 
-        package = haskellPackages.callCabal2nix packageName ./. rec {
+        package = haskellPackages.callCabal2nix packageName self rec {
             # Dependency overrides go here
         };
       in {
@@ -43,6 +43,10 @@
             cabal2nix
           ];
           inputsFrom = builtins.attrValues self.packages.${system};
+
+          shellHook = ''
+            export LD_LIBRARY_PATH=${pkgs.zlib}/lib
+          '';
         };
       });
 }
